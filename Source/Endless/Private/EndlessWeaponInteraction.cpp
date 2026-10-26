@@ -21,43 +21,76 @@ AActor* AEndlessPlayerCharacter::FindInteractionTarget() const
 
 void AEndlessPlayerCharacter::CancelWeaponExchange()
 {
-    ExchangePickup.Reset();ExchangeSlot=INDEX_NONE;
+    ExchangePickup.Reset();
+    ExchangeSlot = INDEX_NONE;
+}
+
+void AEndlessPlayerCharacter::ConfirmWeaponExchange(AEndlessWeaponPickup* Pickup)
+{
+    if (!Pickup->CanCollect(this) || !OwnedWeaponIndices.IsValidIndex(ExchangeSlot))
+    {
+        CancelWeaponExchange();
+        return;
+    }
+
+    // 選択した1枠だけを交換する。失敗時は元の弾薬と所持状態を戻す。
+    ReadLegacyAmmo();
+    CancelWeaponReload();
+    StopWeaponFire();
+    const auto SavedOwned = OwnedWeaponIndices;
+    const auto SavedAmmo = WeaponAmmo;
+    const int32 Removed = OwnedWeaponIndices[ExchangeSlot];
+    OwnedWeaponIndices.RemoveAt(ExchangeSlot);
+    if (Pickup->TryCollect(this))
+    {
+        WeaponAmmo[Removed] = FEndlessWeaponAmmo();
+        const int32 Added = OwnedWeaponIndices.Pop();
+        OwnedWeaponIndices.Insert(Added, ExchangeSlot);
+        // 旧GameInstance弾薬を新しい装備へ読み戻さない。
+        EquippedWeaponIndex = INDEX_NONE;
+        EquipWeapon(Added);
+    }
+    else
+    {
+        OwnedWeaponIndices = SavedOwned;
+        WeaponAmmo = SavedAmmo;
+        PublishAmmo();
+    }
+    CancelWeaponExchange();
 }
 
 void AEndlessPlayerCharacter::InteractWithTarget()
 {
-    if (!CanUseWeapon()) { CancelWeaponExchange();return; }
-    if (auto* Pickup=ExchangePickup.Get())
+    if (!CanUseWeapon())
     {
-        if (!Pickup->CanCollect(this) || !OwnedWeaponIndices.IsValidIndex(ExchangeSlot)) { CancelWeaponExchange();return; }
-        // 選択した1枠だけを交換する。失敗時は元の弾薬と所持状態を戻す。
-        ReadLegacyAmmo();CancelWeaponReload();StopWeaponFire();
-        const auto SavedOwned=OwnedWeaponIndices;const auto SavedAmmo=WeaponAmmo;
-        const int32 Removed=OwnedWeaponIndices[ExchangeSlot];
-        OwnedWeaponIndices.RemoveAt(ExchangeSlot);
-        if (Pickup->TryCollect(this))
+        CancelWeaponExchange();
+        return;
+    }
+    if (auto* Pickup = ExchangePickup.Get())
+    {
+        ConfirmWeaponExchange(Pickup);
+        return;
+    }
+
+    AActor* Target = FindInteractionTarget();
+    if (auto* Pickup = Cast<AEndlessWeaponPickup>(Target))
+    {
+        if (!Pickup->TryCollect(this) && OwnedWeaponIndices.Num() >= MaxOwnedWeapons)
         {
-            WeaponAmmo[Removed]=FEndlessWeaponAmmo();
-            const int32 Added=OwnedWeaponIndices.Pop();OwnedWeaponIndices.Insert(Added,ExchangeSlot);
-            // 旧GameInstance弾薬を新しい装備へ読み戻さない。
-            EquippedWeaponIndex=INDEX_NONE;EquipWeapon(Added);
+            ExchangePickup = Pickup;
+            ExchangeSlot = INDEX_NONE;
         }
-        else { OwnedWeaponIndices=SavedOwned;WeaponAmmo=SavedAmmo;PublishAmmo(); }
-        CancelWeaponExchange();return;
     }
-    AActor* Target=FindInteractionTarget();
-    if (auto* Pickup=Cast<AEndlessWeaponPickup>(Target))
+    else if (auto* Door = Cast<AEndlessRoomDoor>(Target))
     {
-        if (!Pickup->TryCollect(this) && OwnedWeaponIndices.Num()>=3)
-        { ExchangePickup=Pickup;ExchangeSlot=INDEX_NONE; }
+        Door->NativeInteract(this);
     }
-    else if (auto* Door=Cast<AEndlessRoomDoor>(Target)) Door->NativeInteract(this);
 }
 
 FText AEndlessPlayerCharacter::GetInteractionPrompt() const
 {
     if (!CanUseWeapon()) return FText::GetEmpty();
-    FString Text=FString::Printf(TEXT("所持 %d/3  "),OwnedWeaponIndices.Num());
+    FString Text = FString::Printf(TEXT("所持 %d/%d  "), OwnedWeaponIndices.Num(), MaxOwnedWeapons);
     if (ExchangePickup.IsValid())
     {
         if (OwnedWeaponIndices.IsValidIndex(ExchangeSlot))
@@ -65,8 +98,20 @@ FText AEndlessPlayerCharacter::GetInteractionPrompt() const
                 *WeaponCatalog->Weapons[OwnedWeaponIndices[ExchangeSlot]].DisplayName.ToString(),*ExchangePickup->Contents.WeaponId.ToString());
         else Text+=TEXT("所持上限: 武器切替で交換する枠を選択 / 離れて取消");
     }
-    else if (auto* Pickup=Cast<AEndlessWeaponPickup>(FindInteractionTarget()))
-        Text+=FString::Printf(TEXT("インタラクト: %s を拾う%s"),*Pickup->Contents.WeaponId.ToString(),OwnedWeaponIndices.Num()>=3 ? TEXT(" / 未所持なら交換選択") : TEXT(""));
-    else if (FindInteractionTarget()) Text+=TEXT("インタラクト: ドアを開く");
+    else
+    {
+        // 同じ表示更新でドア・拾得物の全Actorを二度走査しない。
+        AActor* Target = FindInteractionTarget();
+        if (auto* Pickup = Cast<AEndlessWeaponPickup>(Target))
+        {
+            Text += FString::Printf(TEXT("インタラクト: %s を拾う%s"),
+                *Pickup->Contents.WeaponId.ToString(),
+                OwnedWeaponIndices.Num() >= MaxOwnedWeapons ? TEXT(" / 未所持なら交換選択") : TEXT(""));
+        }
+        else if (Target)
+        {
+            Text += TEXT("インタラクト: ドアを開く");
+        }
+    }
     return FText::FromString(Text);
 }

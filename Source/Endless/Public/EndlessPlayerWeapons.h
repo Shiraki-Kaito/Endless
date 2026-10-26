@@ -114,6 +114,7 @@ class ENDLESS_API AEndlessPlayerCharacter : public ACharacter
     GENERATED_BODY()
 public:
     AEndlessPlayerCharacter();
+    static constexpr int32 MaxOwnedWeapons = 3;
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly) TObjectPtr<class UEndlessSensoryComponent> Sensory;
     virtual void Tick(float DeltaSeconds) override;
     virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
@@ -168,6 +169,7 @@ protected:
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 private:
+    void ConfirmWeaponExchange(class AEndlessWeaponPickup* Pickup);
     void AimPressed();
     void AimReleased();
     void CancelAimForRoll();

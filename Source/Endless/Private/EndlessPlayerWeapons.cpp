@@ -212,7 +212,7 @@ bool AEndlessPlayerCharacter::AcquireWeapon(FName Id, int32 Magazine, int32 Rese
     auto& Ammo = WeaponAmmo[Index];
     if (!OwnsWeapon(Index))
     {
-        if (OwnedWeaponIndices.Num()>=3) return false;
+        if (OwnedWeaponIndices.Num() >= MaxOwnedWeapons) return false;
         OwnedWeaponIndices.Add(Index);
         Ammo.Magazine = FMath::Clamp(Magazine,0,WeaponCatalog->Weapons[Index].MagazineSize);
         Ammo.Reserve = FMath::Max(0,Reserve) + FMath::Max(0,Magazine-Ammo.Magazine);

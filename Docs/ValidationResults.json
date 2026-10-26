@@ -1,0 +1,238 @@
+{
+  "engine": "5.6.1",
+  "git": {
+    "branch": "feature/room-system-foundation",
+    "remote": "origin",
+    "head": "28bc57793ea53cc2842713107a0eaf02558873b6",
+    "final_commit": null,
+    "push_completed": false,
+    "staging_blocker": ".git/index.lock: Permission denied",
+    "remote_blocker": "Could not connect to github.com port 443"
+  },
+  "source_builds": {
+    "EndlessEditor": "passed using existing project-local BuildHost and in-process EditorCycleWorkaround",
+    "Endless": "passed using existing project-local BuildHost",
+    "standard_build": "failed: user directory write permission"
+  },
+  "blueprints_compiled": [
+    "/Game/Characters/Mannequins/Anims/Unarmed/ABP_Unarmed",
+    "/Game/Endless/Blueprints/Doors/BP_RoomDoor",
+    "/Game/Endless/Blueprints/Interaction/BPI_Interactable",
+    "/Game/Endless/Blueprints/Managers/BP_RoomManager",
+    "/Game/Endless/Weapons/ABP_PlayerPistol",
+    "/Game/Endless/Weapons/ABP_PlayerRifle",
+    "/Game/Scene_Warehouse/Assets/Blueprints/BPP_Ind_War_Rack_00",
+    "/Game/TacticalSurvive/Blueprints/BP_Bullet",
+    "/Game/TacticalSurvive/Blueprints/BP_Enemy",
+    "/Game/TacticalSurvive/Blueprints/BP_MyGameInstance",
+    "/Game/TacticalSurvive/Blueprints/BP_RoomManager",
+    "/Game/TacticalSurvive/Blueprints/BP_TSCharacter",
+    "/Game/TacticalSurvive/Input/Touch/BPI_TouchInterface",
+    "/Game/TacticalSurvive/Map/BP_bulletbox",
+    "/Game/TacticalSurvive/Map/medicalkit",
+    "/Game/ThirdPerson/Blueprints/BP_ThirdPersonGameMode",
+    "/Game/ThirdPerson/Blueprints/BP_ThirdPersonPlayerController"
+  ],
+  "game_maps": [
+    "/Game/Endless/Rooms/Start/Lvl_StartCorridor",
+    "/Game/Endless/Rooms/Room/Lvl_Room_01",
+    "/Game/Endless/Rooms/Room/Lvl_Room_02",
+    "/Game/Endless/Rooms/Room/Lvl_Room_03",
+    "/Game/Endless/Rooms/Room/Lvl_Room_04",
+    "/Game/Endless/Rooms/Room/Lvl_Room_05",
+    "/Game/Endless/Rooms/Room/Lvl_Room_06",
+    "/Game/Endless/Rooms/Room/Lvl_Room_07",
+    "/Game/Endless/Rooms/Room/Lvl_Room_08",
+    "/Game/Endless/Rooms/Room/Lvl_Room_09",
+    "/Game/Endless/Rooms/Room/Lvl_Room_10",
+    "/Game/Endless/Rooms/Room/Lvl_Room_11",
+    "/Game/Endless/Rooms/Room/Lvl_Room_12",
+    "/Game/Endless/Rooms/Room/Lvl_Room_13",
+    "/Game/Endless/Rooms/Room/Lvl_Room_14"
+  ],
+  "map_check": {
+    "errors": 0,
+    "warnings": {
+      "Lvl_Room_11": "generated prop has NULL StaticMesh",
+      "Lvl_Room_12": "generated prop has NULL StaticMesh",
+      "Lvl_Room_13": "generated prop has NULL StaticMesh",
+      "Lvl_Room_14": "generated prop has NULL StaticMesh"
+    }
+  },
+  "initial_combat": {
+    "source": "combat_results.json",
+    "records": 60,
+    "passed": 58,
+    "failed_tests": [
+      "enemy follows side/back",
+      "damage confirmed blood"
+    ]
+  },
+  "combat_clear_fixture": {
+    "source": "combat_clear_results.json",
+    "records": 60,
+    "passed": 60,
+    "failed_tests": []
+  },
+  "room_ai_initial": {
+    "source": "room_ai_results.json",
+    "records": 20,
+    "passed": 19,
+    "failed_tests": [
+      "blocked stairs stay downstairs 11"
+    ]
+  },
+  "blocked_stair_retry": {
+    "source": "blocked_retry_results.json",
+    "records": 4,
+    "passed": 4,
+    "failed_tests": []
+  },
+  "walking_routes": {
+    "source": "walking_routes_results.json",
+    "records": 8,
+    "passed": 8,
+    "failed_tests": []
+  },
+  "suite_processes": [
+    {
+      "test": "all_rooms",
+      "exit_code": 0,
+      "seconds": 142.3330324999988
+    },
+    {
+      "test": "combat",
+      "exit_code": 0,
+      "seconds": 85.16362709999521
+    },
+    {
+      "test": "connections",
+      "exit_code": 3221225477,
+      "seconds": 295.9743113999939
+    },
+    {
+      "test": "streaming",
+      "exit_code": 0,
+      "seconds": 53.808737499995914
+    },
+    {
+      "test": "room_ai",
+      "exit_code": 3221225477,
+      "seconds": 162.4143985000046
+    },
+    {
+      "test": "duplicate",
+      "exit_code": 0,
+      "seconds": 26.089678600001207
+    }
+  ],
+  "followup_processes": [
+    {
+      "test": "walking_routes",
+      "exit_code": 0,
+      "seconds": 71.62142699999822
+    },
+    {
+      "test": "combat_clear",
+      "exit_code": 3221225477,
+      "seconds": 79.00756230000115
+    },
+    {
+      "test": "gallery",
+      "exit_code": 3221225477,
+      "seconds": 37.46390939999401
+    },
+    {
+      "test": "connections_shutdown",
+      "exit_code": 0,
+      "seconds": 40.542422700003954
+    }
+  ],
+  "blocked_retry_process": [
+    {
+      "test": "blocked_retry",
+      "exit_code": 0,
+      "seconds": 74.570203400006
+    }
+  ],
+  "cook_initial": {
+    "maps": [
+      "/Game/Endless/Rooms/Start/Lvl_StartCorridor",
+      "/Game/Endless/Rooms/Room/Lvl_Room_01",
+      "/Game/Endless/Rooms/Room/Lvl_Room_02",
+      "/Game/Endless/Rooms/Room/Lvl_Room_03",
+      "/Game/Endless/Rooms/Room/Lvl_Room_04",
+      "/Game/Endless/Rooms/Room/Lvl_Room_05",
+      "/Game/Endless/Rooms/Room/Lvl_Room_06",
+      "/Game/Endless/Rooms/Room/Lvl_Room_07",
+      "/Game/Endless/Rooms/Room/Lvl_Room_08",
+      "/Game/Endless/Rooms/Room/Lvl_Room_09",
+      "/Game/Endless/Rooms/Room/Lvl_Room_10",
+      "/Game/Endless/Rooms/Room/Lvl_Room_11",
+      "/Game/Endless/Rooms/Room/Lvl_Room_12",
+      "/Game/Endless/Rooms/Room/Lvl_Room_13",
+      "/Game/Endless/Rooms/Room/Lvl_Room_14"
+    ],
+    "exit_code": 1,
+    "seconds": 600.8420321000012,
+    "stopped_reason": "Cook exceeded the 10 minute local validation time limit",
+    "output_directory": "Saved/Finalization_20261026/Cooked",
+    "packaging_performed": false
+  },
+  "cook_retry": {
+    "maps": [
+      "/Game/Endless/Rooms/Start/Lvl_StartCorridor",
+      "/Game/Endless/Rooms/Room/Lvl_Room_01",
+      "/Game/Endless/Rooms/Room/Lvl_Room_02",
+      "/Game/Endless/Rooms/Room/Lvl_Room_03",
+      "/Game/Endless/Rooms/Room/Lvl_Room_04",
+      "/Game/Endless/Rooms/Room/Lvl_Room_05",
+      "/Game/Endless/Rooms/Room/Lvl_Room_06",
+      "/Game/Endless/Rooms/Room/Lvl_Room_07",
+      "/Game/Endless/Rooms/Room/Lvl_Room_08",
+      "/Game/Endless/Rooms/Room/Lvl_Room_09",
+      "/Game/Endless/Rooms/Room/Lvl_Room_10",
+      "/Game/Endless/Rooms/Room/Lvl_Room_11",
+      "/Game/Endless/Rooms/Room/Lvl_Room_12",
+      "/Game/Endless/Rooms/Room/Lvl_Room_13",
+      "/Game/Endless/Rooms/Room/Lvl_Room_14"
+    ],
+    "exit_code": 0,
+    "seconds": 95.02856880000036,
+    "stopped_reason": null,
+    "output_directory": "Saved/Finalization_20261026/Cooked",
+    "packaging_performed": false
+  },
+  "cook_warnings": 7,
+  "cooked_selection": {
+    "cooked_game_packages": 481,
+    "untracked_outside_selection": []
+  },
+  "missing_soft_references": [
+    {
+      "from": "/Game/CR/Demo/Meshes/SK_Mannequin",
+      "to": "/Game/Characters/Mannequins/Meshes/SKM_Quinn",
+      "hard": false
+    },
+    {
+      "from": "/Game/CR/Demo/Meshes/SK_Mannequin",
+      "to": "/Game/Characters/Mannequins/Meshes/SKM_Manny",
+      "hard": false
+    }
+  ],
+  "unresolved": [
+    "Some PIE processes terminate with access violation 0xC0000005 after writing results",
+    "NavigationSystem CDO ensure during shutdown",
+    "Anonymous startup LogAutomationTest Condition failed errors",
+    "Four existing HS_WeaponPack_03 demo packages cannot be loaded by this engine"
+  ],
+  "not_verified": [
+    "DX12/Lumen/Virtual Shadow Maps runtime",
+    "Packaged product execution",
+    "Clean clone/build/play on another PC",
+    "Physical gamepad and all keyboard inputs",
+    "Long-duration play",
+    "Remote branch divergence",
+    "Staged new LFS objects and remote LFS transfer"
+  ]
+}
